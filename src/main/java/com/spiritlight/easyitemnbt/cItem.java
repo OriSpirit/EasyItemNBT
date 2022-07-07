@@ -33,39 +33,36 @@ public class cItem {
             if (tag.hasKey("EINParsed")) continue;
             List<String> itemLore = new ArrayList<>();
             NBTTagCompound display = tag.getCompoundTag("display");
+            List<String> ogItemLore = new ArrayList<>();
             if (display.hasKey("Lore", 9)) {
                 NBTTagList list = display.getTagList("Lore", 8);
                 for (int i = 0; i < list.tagCount(); i++) {
-                    itemLore.add(list.getStringTagAt(i));
+                    ogItemLore.add(list.getStringTagAt(i));
                 }
             }
             itemLore.add("");
             itemLore.addAll(StringUtils.cutString(tag.toString(), 56, new char[]{',', '}', ' '}));
             NBTTagList tagList = new NBTTagList();
-            tagList.appendTag(new NBTTagString(TextFormatting.RESET + "Item NBT: "));
             itemLore.add("");
             List<String> coloredLore = new ArrayList<>();
             for (String s : itemLore) {
                 coloredLore.add(format(s));
             }
-            for (String s : coloredLore) {
+            ogItemLore.add("");
+            ogItemLore.addAll(coloredLore);
+            for (String s : ogItemLore) {
                 tagList.appendTag(new NBTTagString(s));
             }
             if (ret.hasKey("tag")) {
-                if (ret.hasKey("display")) {
-                    ret.getCompoundTag("tag").setTag("display", display);
-                    ret.getCompoundTag("tag").getCompoundTag("display").setTag("Lore", tagList);
-                } else {
+                if (!ret.hasKey("display")) {
                     ret.getCompoundTag("tag").setTag("display", new NBTTagCompound());
-                    ret.getCompoundTag("tag").setTag("display", display);
-                    ret.getCompoundTag("tag").getCompoundTag("display").setTag("Lore", tagList);
                 }
             } else {
                 ret.setTag("tag", new NBTTagCompound());
                 ret.getCompoundTag("tag").setTag("display", new NBTTagCompound());
-                ret.getCompoundTag("tag").setTag("display", display);
-                ret.getCompoundTag("tag").getCompoundTag("display").setTag("Lore", tagList);
             }
+            ret.getCompoundTag("tag").setTag("display", display);
+            ret.getCompoundTag("tag").getCompoundTag("display").setTag("Lore", tagList);
             ret.getCompoundTag("tag").setTag("EINParsed", new NBTTagInt(1));
             stx.deserializeNBT(ret);
             itemSet.add(stx.hashCode());
