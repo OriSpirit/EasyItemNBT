@@ -53,14 +53,17 @@ public class cItem {
             }
             if (ret.hasKey("tag")) {
                 if (ret.hasKey("display")) {
+                    ret.getCompoundTag("tag").setTag("display", display);
                     ret.getCompoundTag("tag").getCompoundTag("display").setTag("Lore", tagList);
                 } else {
                     ret.getCompoundTag("tag").setTag("display", new NBTTagCompound());
+                    ret.getCompoundTag("tag").setTag("display", display);
                     ret.getCompoundTag("tag").getCompoundTag("display").setTag("Lore", tagList);
                 }
             } else {
                 ret.setTag("tag", new NBTTagCompound());
                 ret.getCompoundTag("tag").setTag("display", new NBTTagCompound());
+                ret.getCompoundTag("tag").setTag("display", display);
                 ret.getCompoundTag("tag").getCompoundTag("display").setTag("Lore", tagList);
             }
             ret.getCompoundTag("tag").setTag("EINParsed", new NBTTagInt(1));
